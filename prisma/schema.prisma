@@ -1,0 +1,183 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Categoria {
+  id        Int        @id @default(autoincrement())
+  nombre    String
+  productos Producto[]
+}
+
+model Marca {
+  id        Int        @id @default(autoincrement())
+  nombre    String     @unique
+  productos Producto[]
+}
+
+model Producto {
+  id              Int               @id @default(autoincrement())
+  nombre          String
+  descripcion     String
+  precioCompra    Decimal           @db.Decimal(10, 2)
+  precioVenta     Decimal           @db.Decimal(10, 2)
+  categoriaId     Int
+  marcaId         Int
+
+  categoria       Categoria         @relation(fields: [categoriaId], references: [id])
+  marca           Marca             @relation(fields: [marcaId], references: [id])
+  inventario      Inventario?
+  detalleCarritos DetalleCarrito[]
+  detallePedidos  DetallePedido[]
+  detalleVentas   DetalleVenta[]
+}
+
+model Inventario {
+  id         Int      @id @default(autoincrement())
+  productoId Int      @unique
+  stock      Int
+
+  producto Producto @relation(fields: [productoId], references: [id])
+}
+
+model Usuario {
+  id         Int         @id @default(autoincrement())
+  email      String      @unique
+  password   String
+  rol        Rol
+  clienteWeb ClienteWeb?
+  cajas      Caja[]
+}
+
+enum Rol {
+  ADMIN
+  CAJERO
+  CLIENTE
+}
+
+model ClienteWeb {
+  id          Int         @id @default(autoincrement())
+  usuarioId   Int         @unique
+  nombre      String
+  apellido    String
+  telefono    String
+  direcciones Direccion[]
+  carrito     Carrito?
+  pedidos     Pedido[]
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+}
+
+model Direccion {
+  id         Int      @id @default(autoincrement())
+  clienteId  Int
+  calle      String
+  numero     String
+  ciudad     String
+  referencia String
+  pedidos    Pedido[]
+
+  cliente ClienteWeb @relation(fields: [clienteId], references: [id])
+}
+
+model Carrito {
+  id            Int             @id @default(autoincrement())
+  clienteId     Int             @unique
+  creadoEn      DateTime
+  actualizadoEn DateTime
+  detalles      DetalleCarrito[]
+
+  cliente ClienteWeb @relation(fields: [clienteId], references: [id])
+}
+
+model DetalleCarrito {
+  id         Int @id @default(autoincrement())
+  carritoId  Int
+  productoId Int
+  cantidad   Int
+
+  carrito  Carrito  @relation(fields: [carritoId], references: [id], onDelete: Cascade)
+  producto Producto @relation(fields: [productoId], references: [id])
+}
+
+model Pedido {
+  id          Int          @id @default(autoincrement())
+  clienteId   Int
+  direccionId Int
+  fecha       DateTime
+  estado      EstadoPedido
+  total       Decimal      @db.Decimal(10, 2)
+
+  detalles    DetallePedido[]
+  cliente     ClienteWeb      @relation(fields: [clienteId], references: [id])
+  direccion   Direccion       @relation(fields: [direccionId], references: [id])
+}
+
+enum EstadoPedido {
+  PENDIENTE
+  PAGADO
+  EN_TRANSITO
+  ENTREGADO
+  CANCELADO
+}
+
+model DetallePedido {
+  id             Int     @id @default(autoincrement())
+  pedidoId       Int
+  productoId     Int
+  cantidad       Int
+  precioUnitario Decimal @db.Decimal(10, 2)
+
+  pedido   Pedido   @relation(fields: [pedidoId], references: [id])
+  producto Producto @relation(fields: [productoId], references: [id])
+}
+
+model Caja {
+  id            Int       @id @default(autoincrement())
+  cajeroId      Int
+  fechaApertura DateTime
+  fechaCierre   DateTime?
+  montoInicial  Decimal   @db.Decimal(10, 2)
+  montoFinal    Decimal?  @db.Decimal(10, 2)
+
+  cajero Usuario @relation(fields: [cajeroId], references: [id])
+  ventas Venta[]
+}
+
+model Venta {
+  id          Int         @id @default(autoincrement())
+  fecha       DateTime
+  total       Decimal     @db.Decimal(10, 2)
+  metodoPago  MetodoPago
+  cajaId      Int
+
+  caja     Caja           @relation(fields: [cajaId], references: [id])
+  detalles DetalleVenta[]
+}
+
+enum MetodoPago {
+  EFECTIVO
+  TARJETA
+  TRANSFERENCIA
+  QR
+}
+
+model DetalleVenta {
+  id             Int     @id @default(autoincrement())
+  ventaId        Int
+  productoId     Int
+  cantidad       Int
+  precioUnitario Decimal @db.Decimal(10, 2)
+
+  venta    Venta    @relation(fields: [ventaId], references: [id])
+  producto Producto @relation(fields: [productoId], references: [id])
+}
