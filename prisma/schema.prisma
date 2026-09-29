@@ -5,7 +5,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -32,6 +32,7 @@ model Producto {
   precioVenta     Decimal           @db.Decimal(10, 2)
   categoriaId     Int
   marcaId         Int
+  activo Boolean @default(true)
 
   categoria       Categoria         @relation(fields: [categoriaId], references: [id])
   marca           Marca             @relation(fields: [marcaId], references: [id])
