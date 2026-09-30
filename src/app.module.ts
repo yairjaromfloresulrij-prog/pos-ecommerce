@@ -5,6 +5,7 @@ import { AppService } from './app.service.js';
 import { AuthModule } from './auth/auth.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { ProductosModule } from './productos/productos.module.js';
+import { VentasModule } from './ventas/ventas.module.js';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ProductosModule } from './productos/productos.module.js';
       isGlobal: true,
     }),
     ProductosModule,
+    VentasModule,
   ],
   controllers: [AppController],
   providers: [AppService],
