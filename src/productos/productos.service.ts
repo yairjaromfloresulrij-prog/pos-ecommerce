@@ -53,6 +53,11 @@ export class ProductosService {
     const productos = await this.prisma.producto.findMany({
       where: {
         activo: true,
+        inventario: {
+          stock: {
+            gt: 0,
+          },
+        },
         ...(categoriaId
           ? {
               categoriaId: Number(categoriaId),
