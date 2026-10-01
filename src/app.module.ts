@@ -6,6 +6,8 @@ import { AuthModule } from './auth/auth.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { ProductosModule } from './productos/productos.module.js';
 import { VentasModule } from './ventas/ventas.module.js';
+import { CarritosModule } from './carritos/carritos.module.js';
+import { PedidosModule } from './pedidos/pedidos.module.js';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { VentasModule } from './ventas/ventas.module.js';
     }),
     ProductosModule,
     VentasModule,
+    CarritosModule,
+    PedidosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
