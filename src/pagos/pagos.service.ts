@@ -68,7 +68,7 @@ export class PagosService {
 
     try {
       response = await this.httpService.axiosRef.post(
-        'https://mockpay-backend.onrender.com/api/v1/payments',
+        'https://api-mock-payment.funvaltech.cloud/api/v1/payments',
         {
           amount: monto,
           currency: 'USD',
