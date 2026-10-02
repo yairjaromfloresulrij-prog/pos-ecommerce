@@ -12,13 +12,15 @@ import { CreateCarritoDto } from './dto/create-carrito.dto.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../auth/guards/roles.guard.js';
 import { Roles } from '../auth/decorators/roles.decorator.js';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
 
+@ApiTags('Carritos')
 @Controller('carritos')
 export class CarritosController {
   constructor(private readonly carritosService: CarritosService) {}
 
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Agregar un producto al carrito' })
   @Post()
   @Roles(`CLIENTE`)
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -29,10 +31,11 @@ export class CarritosController {
     return this.carritosService.create(createCarritoDto, req.user);
   }
   @ApiBearerAuth()
+  @ApiOperation({ summary: 'Consultar el carrito del cliente' })
   @Get()
   @Roles(`CLIENTE`)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  findAll(@Request() req: ExpressRequest) {
+  findOne(@Request() req: ExpressRequest) {
     return this.carritosService.findOne(req.user);
   }
 }

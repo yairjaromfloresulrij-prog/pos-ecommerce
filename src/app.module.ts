@@ -8,6 +8,7 @@ import { ProductosModule } from './productos/productos.module.js';
 import { VentasModule } from './ventas/ventas.module.js';
 import { CarritosModule } from './carritos/carritos.module.js';
 import { PedidosModule } from './pedidos/pedidos.module.js';
+import { CajasModule } from './cajas/cajas.module.js';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PedidosModule } from './pedidos/pedidos.module.js';
     VentasModule,
     CarritosModule,
     PedidosModule,
+    CajasModule,
   ],
   controllers: [AppController],
   providers: [AppService],
