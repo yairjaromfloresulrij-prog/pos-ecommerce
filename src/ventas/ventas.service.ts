@@ -1,6 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateVentaDto } from './dto/create-venta.dto.js';
-import { UpdateVentaDto } from './dto/update-venta.dto.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 @Injectable()
@@ -116,15 +115,22 @@ export class VentasService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} venta`;
-  }
+  async findOne(id: number) {
+    const venta = await this.prisma.venta.findUnique({
+      where: { id },
+      include: {
+        detalles: {
+          include: {
+            producto: true,
+          },
+        },
+      },
+    });
 
-  update(id: number, updateVentaDto: UpdateVentaDto) {
-    return `This action updates a #${id} venta`;
-  }
+    if (!venta) {
+      throw new BadRequestException(`La venta con id ${id} no existe`);
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} venta`;
+    return venta;
   }
 }

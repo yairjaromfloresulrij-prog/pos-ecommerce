@@ -14,7 +14,12 @@ import { CreateCajaDto } from './dto/create-caja.dto.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../auth/guards/roles.guard.js';
 import { Roles } from '../auth/decorators/roles.decorator.js';
-import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+} from '@nestjs/swagger';
 import { CerrarCajaDto } from './dto/cerrar-caja.dto.js';
 
 @ApiTags('Cajas')
@@ -51,6 +56,11 @@ export class CajasController {
   @Roles('CAJERO')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Cerrar una caja y realizar la conciliación' })
+  @ApiParam({
+    name: 'id',
+    example: 1,
+    description: 'ID de la caja que se desea cerrar',
+  })
   @Patch(':id/cerrar')
   cerrar(
     @Param('id') id: string,

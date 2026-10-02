@@ -15,6 +15,7 @@ import { CreateProductoDto } from './dto/create-producto.dto.js';
 import { UpdateProductoDto } from './dto/update-producto.dto.js';
 import {
   ApiBearerAuth,
+  ApiParam,
   ApiQuery,
   ApiOkResponse,
   ApiTags,
@@ -25,39 +26,56 @@ import { RolesGuard } from '../auth/guards/roles.guard.js';
 import { Roles } from '../auth/decorators/roles.decorator.js';
 import { ProductoResponseDto } from './dto/producto-response.dto.js';
 import { ProductoDeleteResponseDto } from './dto/producto-delete-response.dto.js';
+
 @ApiTags('Productos')
 @Controller('productos')
 export class ProductosController {
   constructor(private readonly productosService: ProductosService) {}
+
   @ApiBearerAuth()
   @Roles('ADMIN')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOkResponse({
     type: ProductoResponseDto,
   })
-  @ApiOperation({ summary: 'Crear un nuevo producto' })
+  @ApiOperation({
+    summary: 'Crear un nuevo producto',
+  })
   @Post()
   create(@Body() createProductoDto: CreateProductoDto) {
     return this.productosService.create(createProductoDto);
   }
+
   @ApiQuery({
     name: 'categoriaId',
     required: false,
     type: Number,
+    example: 1,
+    description: 'Filtra los productos por el ID de la categoría',
   })
   @ApiOkResponse({
     type: ProductoResponseDto,
     isArray: true,
   })
-  @ApiOperation({ summary: 'Consultar el catálogo de productos' })
+  @ApiOperation({
+    summary: 'Consultar el catálogo de productos',
+  })
   @Get()
   findAll(@Query(`categoriaId`) categoriaId?: string) {
     return this.productosService.findAll(categoriaId);
   }
+
+  @ApiParam({
+    name: 'id',
+    example: 1,
+    description: 'ID del producto que se desea consultar',
+  })
   @ApiOkResponse({
     type: ProductoResponseDto,
   })
-  @ApiOperation({ summary: 'Consultar un producto por su ID' })
+  @ApiOperation({
+    summary: 'Consultar un producto por su ID',
+  })
   @Get(':id')
   findOne(@Param('id') id: string) {
     const idNumero = Number(id);
@@ -70,13 +88,21 @@ export class ProductosController {
 
     return this.productosService.findOne(idNumero);
   }
+
   @ApiBearerAuth()
   @Roles('ADMIN')
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiParam({
+    name: 'id',
+    example: 1,
+    description: 'ID del producto que se desea actualizar',
+  })
   @ApiOkResponse({
     type: ProductoResponseDto,
   })
-  @ApiOperation({ summary: 'Actualizar un producto' })
+  @ApiOperation({
+    summary: 'Actualizar un producto',
+  })
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -84,13 +110,21 @@ export class ProductosController {
   ) {
     return this.productosService.update(+id, updateProductoDto);
   }
+
   @ApiBearerAuth()
   @Roles('ADMIN')
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiParam({
+    name: 'id',
+    example: 1,
+    description: 'ID del producto que se desea desactivar',
+  })
   @ApiOkResponse({
     type: ProductoDeleteResponseDto,
   })
-  @ApiOperation({ summary: 'Desactivar un producto' })
+  @ApiOperation({
+    summary: 'Desactivar un producto',
+  })
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productosService.remove(+id);
