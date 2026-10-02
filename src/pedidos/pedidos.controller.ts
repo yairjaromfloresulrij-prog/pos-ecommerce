@@ -14,9 +14,10 @@ import { CreatePedidoDto } from './dto/create-pedido.dto.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../auth/guards/roles.guard.js';
 import { Roles } from '../auth/decorators/roles.decorator.js';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { UpdateEstadoPedidoDto } from './dto/update-pedido.dto.js';
 
+@ApiTags('Pedidos')
 @Controller('pedidos')
 export class PedidosController {
   constructor(private readonly pedidosService: PedidosService) {}
@@ -24,6 +25,7 @@ export class PedidosController {
   @ApiBearerAuth()
   @Roles('CLIENTE')
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiOperation({ summary: 'Crear un pedido a partir del carrito' })
   @Post()
   create(
     @Body() createPedidoDto: CreatePedidoDto,
@@ -31,15 +33,17 @@ export class PedidosController {
   ) {
     return this.pedidosService.create(createPedidoDto, req.user);
   }
-
+  @ApiOperation({ summary: 'Consultar todos los pedidos' })
   @Get()
   findAll() {
     return this.pedidosService.findAll();
   }
+  @ApiOperation({ summary: 'Consultar la cola de pedidos de logística' })
   @Get('logistica')
   findLogistica() {
     return this.pedidosService.findLogistica();
   }
+  @ApiOperation({ summary: 'Actualizar el estado de un pedido' })
   @Patch(':id/estado')
   updateEstado(
     @Param('id') id: string,
