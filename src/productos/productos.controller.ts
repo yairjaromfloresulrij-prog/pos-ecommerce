@@ -18,6 +18,7 @@ import {
   ApiParam,
   ApiQuery,
   ApiOkResponse,
+  ApiResponse,
   ApiTags,
   ApiOperation,
 } from '@nestjs/swagger';
@@ -26,6 +27,7 @@ import { RolesGuard } from '../auth/guards/roles.guard.js';
 import { Roles } from '../auth/decorators/roles.decorator.js';
 import { ProductoResponseDto } from './dto/producto-response.dto.js';
 import { ProductoDeleteResponseDto } from './dto/producto-delete-response.dto.js';
+import { ActualizarStockDto } from './dto/actualizar-stock.dto.js';
 
 @ApiTags('Productos')
 @Controller('productos')
@@ -45,7 +47,35 @@ export class ProductosController {
   create(@Body() createProductoDto: CreateProductoDto) {
     return this.productosService.create(createProductoDto);
   }
-
+  @ApiBearerAuth()
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiParam({
+    name: 'id',
+    example: 1,
+    description: 'ID del producto al que se desea agregar stock',
+  })
+  @ApiOperation({
+    summary: 'Agregar stock a un producto',
+    description:
+      'Aumenta la cantidad disponible del inventario de un producto.',
+  })
+  @ApiResponse({ status: 200, description: 'Stock actualizado correctamente.' })
+  @ApiResponse({
+    status: 400,
+    description: 'La cantidad debe ser un número entero mayor que 0.',
+  })
+  @ApiResponse({ status: 404, description: 'El producto no existe.' })
+  @Patch(':id/stock')
+  actualizarStock(
+    @Param('id') id: string,
+    @Body() actualizarStockDto: ActualizarStockDto,
+  ) {
+    return this.productosService.actualizarStock(
+      Number(id),
+      actualizarStockDto,
+    );
+  }
   @ApiQuery({
     name: 'categoriaId',
     required: false,

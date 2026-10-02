@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductoDto } from './dto/create-producto.dto.js';
 import { UpdateProductoDto } from './dto/update-producto.dto.js';
 import { PrismaService } from '../prisma/prisma.service.js';
+import { ActualizarStockDto } from './dto/actualizar-stock.dto.js';
 
 @Injectable()
 export class ProductosService {
@@ -136,6 +137,41 @@ export class ProductosService {
             stock: producto.inventario.stock,
           }
         : null,
+    };
+  }
+
+  async actualizarStock(
+    productoId: number,
+    actualizarStockDto: ActualizarStockDto,
+  ) {
+    const producto = await this.prisma.producto.findUnique({
+      where: {
+        id: productoId,
+      },
+      include: {
+        inventario: true,
+      },
+    });
+
+    if (!producto || !producto.activo) {
+      throw new NotFoundException('El producto no existe');
+    }
+
+    const inventario = await this.prisma.inventario.update({
+      where: {
+        productoId,
+      },
+      data: {
+        stock: {
+          increment: actualizarStockDto.cantidad,
+        },
+      },
+    });
+
+    return {
+      productoId,
+      stock: inventario.stock,
+      mensaje: 'Stock actualizado correctamente',
     };
   }
 

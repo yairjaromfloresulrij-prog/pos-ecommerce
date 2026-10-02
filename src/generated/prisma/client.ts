@@ -111,3 +111,8 @@ export type Venta = Prisma.VentaModel
  * 
  */
 export type DetalleVenta = Prisma.DetalleVentaModel
+/**
+ * Model Pago
+ * 
+ */
+export type Pago = Prisma.PagoModel

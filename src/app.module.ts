@@ -9,6 +9,8 @@ import { VentasModule } from './ventas/ventas.module.js';
 import { CarritosModule } from './carritos/carritos.module.js';
 import { PedidosModule } from './pedidos/pedidos.module.js';
 import { CajasModule } from './cajas/cajas.module.js';
+import { PagosModule } from './pagos/pagos.module.js';
+import { DireccionesModule } from './direcciones/direcciones.module.js';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { CajasModule } from './cajas/cajas.module.js';
     CarritosModule,
     PedidosModule,
     CajasModule,
+    PagosModule,
+    DireccionesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

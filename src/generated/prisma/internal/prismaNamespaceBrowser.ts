@@ -64,7 +64,8 @@ export const ModelName = {
   DetallePedido: 'DetallePedido',
   Caja: 'Caja',
   Venta: 'Venta',
-  DetalleVenta: 'DetalleVenta'
+  DetalleVenta: 'DetalleVenta',
+  Pago: 'Pago'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -230,6 +231,21 @@ export const DetalleVentaScalarFieldEnum = {
 } as const
 
 export type DetalleVentaScalarFieldEnum = (typeof DetalleVentaScalarFieldEnum)[keyof typeof DetalleVentaScalarFieldEnum]
+
+
+export const PagoScalarFieldEnum = {
+  id: 'id',
+  pedidoId: 'pedidoId',
+  transactionId: 'transactionId',
+  estado: 'estado',
+  monto: 'monto',
+  moneda: 'moneda',
+  checkoutUrl: 'checkoutUrl',
+  failureReason: 'failureReason',
+  createdAt: 'createdAt'
+} as const
+
+export type PagoScalarFieldEnum = (typeof PagoScalarFieldEnum)[keyof typeof PagoScalarFieldEnum]
 
 
 export const SortOrder = {
