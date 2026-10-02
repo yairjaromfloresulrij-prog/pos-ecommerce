@@ -14,19 +14,19 @@
 
 ### Stack
 
-| Tecnología | Uso |
-| --- | --- |
-| [NestJS 12](https://nestjs.com) | Framework principal |
-| [Prisma 7](https://www.prisma.io) + `@prisma/adapter-pg` | ORM y migraciones |
-| PostgreSQL | Base de datos |
-| Passport + JWT (`@nestjs/jwt`) | Autenticación |
-| bcrypt | Hash de contraseñas |
-| class-validator / class-transformer | Validación de DTOs |
-| `@nestjs/swagger` | Documentación interactiva de la API |
-| `@nestjs/axios` | Comunicación con la pasarela de pagos |
-| Vitest + Supertest | Tests unitarios y e2e |
-| oxlint + Prettier | Lint y formato |
-| pnpm | Gestor de paquetes |
+| Tecnología                                               | Uso                                   |
+| -------------------------------------------------------- | ------------------------------------- |
+| [NestJS 12](https://nestjs.com)                          | Framework principal                   |
+| [Prisma 7](https://www.prisma.io) + `@prisma/adapter-pg` | ORM y migraciones                     |
+| PostgreSQL                                               | Base de datos                         |
+| Passport + JWT (`@nestjs/jwt`)                           | Autenticación                         |
+| bcrypt                                                   | Hash de contraseñas                   |
+| class-validator / class-transformer                      | Validación de DTOs                    |
+| `@nestjs/swagger`                                        | Documentación interactiva de la API   |
+| `@nestjs/axios`                                          | Comunicación con la pasarela de pagos |
+| Vitest + Supertest                                       | Tests unitarios y e2e                 |
+| oxlint + Prettier                                        | Lint y formato                        |
+| pnpm                                                     | Gestor de paquetes                    |
 
 ## Project setup
 
@@ -74,10 +74,10 @@ $ pnpm prisma db seed --config prisma7.config.ts
 
 #### Usuarios del seed
 
-| Rol | Email | Contraseña |
-| --- | --- | --- |
-| ADMIN | `admin@tienda.com` | `admin123` |
-| CAJERO | `cajero@tienda.com` | `cajero123` |
+| Rol     | Email                | Contraseña   |
+| ------- | -------------------- | ------------ |
+| ADMIN   | `admin@tienda.com`   | `admin123`   |
+| CAJERO  | `cajero@tienda.com`  | `cajero123`  |
 | CLIENTE | `cliente@tienda.com` | `cliente123` |
 
 > Son credenciales de desarrollo. Cámbialas o no ejecutes el seed en producción.
@@ -107,42 +107,42 @@ Para probar los endpoints protegidos desde Swagger, inicia sesión en `POST /aut
 
 ### Roles
 
-| Rol | Descripción |
-| --- | --- |
-| `ADMIN` | Gestiona catálogo, stock, usuarios internos, pedidos y consulta cajas y ventas. |
-| `CAJERO` | Abre y cierra su caja y registra ventas en el punto de venta. |
-| `CLIENTE` | Usa la tienda online: carrito, pedidos y pagos. |
+| Rol       | Descripción                                                                     |
+| --------- | ------------------------------------------------------------------------------- |
+| `ADMIN`   | Gestiona catálogo, stock, usuarios internos, pedidos y consulta cajas y ventas. |
+| `CAJERO`  | Abre y cierra su caja y registra ventas en el punto de venta.                   |
+| `CLIENTE` | Usa la tienda online: carrito, pedidos y pagos.                                 |
 
 ### Endpoints
 
-| Módulo | Método | Ruta | Acceso | Descripción |
-| --- | --- | --- | --- | --- |
-| **Auth** | POST | `/auth/register` | Público | Registrar un nuevo cliente |
-| | POST | `/auth/login` | Público | Iniciar sesión y obtener el JWT |
-| | POST | `/auth/users` | ADMIN | Crear un usuario interno |
-| | GET | `/auth/profile` | ADMIN | Perfil del usuario autenticado |
-| **Productos** | GET | `/productos` | Público | Listar productos activos (filtro por `categoriaId`) |
-| | GET | `/productos/:id` | Público | Consultar un producto |
-| | POST | `/productos` | ADMIN | Crear un producto |
-| | PATCH | `/productos/:id` | ADMIN | Actualizar un producto |
-| | PATCH | `/productos/:id/stock` | ADMIN | Actualizar el stock |
-| | DELETE | `/productos/:id` | ADMIN | Baja lógica (`activo = false`) |
-| **Cajas** | POST | `/cajas` | CAJERO | Abrir una caja |
-| | GET | `/cajas/abierta` | CAJERO | Consultar la caja abierta del cajero |
-| | PATCH | `/cajas/:id/cerrar` | CAJERO | Cerrar la caja y conciliar el efectivo |
-| | GET | `/cajas` | ADMIN | Listar todas las cajas con sus ventas |
-| **Ventas** | POST | `/ventas` | CAJERO | Registrar una venta en la caja abierta |
-| | GET | `/ventas` | ADMIN, CAJERO | Listar ventas (filtro opcional `fecha`) |
-| | GET | `/ventas/:id` | ADMIN, CAJERO | Consultar una venta |
-| **Direcciones** | POST | `/direcciones` | — | Crear una dirección para un cliente |
-| **Carritos** | POST | `/carritos` | CLIENTE | Agregar un producto al carrito |
-| | GET | `/carritos` | CLIENTE | Consultar el carrito |
-| **Pedidos** | POST | `/pedidos` | CLIENTE | Crear un pedido a partir del carrito |
-| | GET | `/pedidos` | ADMIN | Listar todos los pedidos |
-| | GET | `/pedidos/logistica` | ADMIN | Cola de pedidos pendientes, pagados y en tránsito |
-| | PATCH | `/pedidos/:id/estado` | ADMIN | Cambiar el estado de un pedido |
-| **Pagos** | POST | `/pagos/crear` | CLIENTE | Iniciar un pago para un pedido |
-| | POST | `/pagos/webhook` | Proveedor | Recibe las notificaciones de MockPay |
+| Módulo          | Método | Ruta                   | Acceso        | Descripción                                         |
+| --------------- | ------ | ---------------------- | ------------- | --------------------------------------------------- |
+| **Auth**        | POST   | `/auth/register`       | Público       | Registrar un nuevo cliente                          |
+|                 | POST   | `/auth/login`          | Público       | Iniciar sesión y obtener el JWT                     |
+|                 | POST   | `/auth/users`          | ADMIN         | Crear un usuario interno                            |
+|                 | GET    | `/auth/profile`        | ADMIN         | Perfil del usuario autenticado                      |
+| **Productos**   | GET    | `/productos`           | Público       | Listar productos activos (filtro por `categoriaId`) |
+|                 | GET    | `/productos/:id`       | Público       | Consultar un producto                               |
+|                 | POST   | `/productos`           | ADMIN         | Crear un producto                                   |
+|                 | PATCH  | `/productos/:id`       | ADMIN         | Actualizar un producto                              |
+|                 | PATCH  | `/productos/:id/stock` | ADMIN         | Actualizar el stock                                 |
+|                 | DELETE | `/productos/:id`       | ADMIN         | Baja lógica (`activo = false`)                      |
+| **Cajas**       | POST   | `/cajas`               | CAJERO        | Abrir una caja                                      |
+|                 | GET    | `/cajas/abierta`       | CAJERO        | Consultar la caja abierta del cajero                |
+|                 | PATCH  | `/cajas/:id/cerrar`    | CAJERO        | Cerrar la caja y conciliar el efectivo              |
+|                 | GET    | `/cajas`               | ADMIN         | Listar todas las cajas con sus ventas               |
+| **Ventas**      | POST   | `/ventas`              | CAJERO        | Registrar una venta en la caja abierta              |
+|                 | GET    | `/ventas`              | ADMIN, CAJERO | Listar ventas (filtro opcional `fecha`)             |
+|                 | GET    | `/ventas/:id`          | ADMIN, CAJERO | Consultar una venta                                 |
+| **Direcciones** | POST   | `/direcciones`         | —             | Crear una dirección para un cliente                 |
+| **Carritos**    | POST   | `/carritos`            | CLIENTE       | Agregar un producto al carrito                      |
+|                 | GET    | `/carritos`            | CLIENTE       | Consultar el carrito                                |
+| **Pedidos**     | POST   | `/pedidos`             | CLIENTE       | Crear un pedido a partir del carrito                |
+|                 | GET    | `/pedidos`             | ADMIN         | Listar todos los pedidos                            |
+|                 | GET    | `/pedidos/logistica`   | ADMIN         | Cola de pedidos pendientes, pagados y en tránsito   |
+|                 | PATCH  | `/pedidos/:id/estado`  | ADMIN         | Cambiar el estado de un pedido                      |
+| **Pagos**       | POST   | `/pagos/crear`         | CLIENTE       | Iniciar un pago para un pedido                      |
+|                 | POST   | `/pagos/webhook`       | Proveedor     | Recibe las notificaciones de MockPay                |
 
 La documentación detallada de cada endpoint (cuerpos, respuestas y códigos de error) está disponible en Swagger: `/api/docs`.
 

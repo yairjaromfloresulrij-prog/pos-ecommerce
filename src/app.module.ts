@@ -11,6 +11,8 @@ import { PedidosModule } from './pedidos/pedidos.module.js';
 import { CajasModule } from './cajas/cajas.module.js';
 import { PagosModule } from './pagos/pagos.module.js';
 import { DireccionesModule } from './direcciones/direcciones.module.js';
+import { CategoriasModule } from './categorias/categorias.module.js';
+import { MarcasModule } from './marcas/marcas.module.js';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { DireccionesModule } from './direcciones/direcciones.module.js';
     CajasModule,
     PagosModule,
     DireccionesModule,
+    CategoriasModule,
+    MarcasModule,
   ],
   controllers: [AppController],
   providers: [AppService],
