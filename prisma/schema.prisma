@@ -119,8 +119,9 @@ model Pedido {
   total       Decimal      @db.Decimal(10, 2)
 
   detalles    DetallePedido[]
-  cliente     ClienteWeb      @relation(fields: [clienteId], references: [id])
-  direccion   Direccion       @relation(fields: [direccionId], references: [id])
+  cliente     ClienteWeb   @relation(fields: [clienteId], references: [id])
+  direccion   Direccion    @relation(fields: [direccionId], references: [id])
+  pago        Pago?
 }
 
 enum EstadoPedido {
@@ -181,4 +182,22 @@ model DetalleVenta {
 
   venta    Venta    @relation(fields: [ventaId], references: [id])
   producto Producto @relation(fields: [productoId], references: [id])
+}
+model Pago {
+  id             Int         @id @default(autoincrement())
+  pedidoId       Int         @unique
+  transactionId  String      @unique
+  estado         EstadoPago
+  monto          Decimal     @db.Decimal(10, 2)
+  moneda         String
+  checkoutUrl    String
+  failureReason  String?
+  createdAt      DateTime    @default(now())
+
+  pedido Pedido @relation(fields: [pedidoId], references: [id])
+}
+enum EstadoPago {
+  PENDIENTE
+  SUCCEEDED
+  FAILED
 }

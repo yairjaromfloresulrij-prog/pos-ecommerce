@@ -37,3 +37,12 @@ export const MetodoPago = {
 } as const
 
 export type MetodoPago = (typeof MetodoPago)[keyof typeof MetodoPago]
+
+
+export const EstadoPago = {
+  PENDIENTE: 'PENDIENTE',
+  SUCCEEDED: 'SUCCEEDED',
+  FAILED: 'FAILED'
+} as const
+
+export type EstadoPago = (typeof EstadoPago)[keyof typeof EstadoPago]

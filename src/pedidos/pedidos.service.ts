@@ -148,15 +148,21 @@ export class PedidosService {
       where: {
         id,
       },
+      include: {
+        detalles: true,
+      },
     });
+
     if (!pedido) {
       throw new NotFoundException(`el pedido no existe`);
     }
-    if (pedido.estado === `ENTREGADO` || pedido.estado == `CANCELADO`) {
+
+    if (pedido.estado === `ENTREGADO` || pedido.estado === `CANCELADO`) {
       throw new BadRequestException(
         `no se puede cambiar le estado de un pedido finalizado`,
       );
     }
+
     const transicionesPermitidas: Record<EstadoPedido, EstadoPedido[]> = {
       PENDIENTE: ['PAGADO', 'CANCELADO'],
       PAGADO: ['EN_TRANSITO', 'CANCELADO'],
@@ -164,6 +170,7 @@ export class PedidosService {
       ENTREGADO: [],
       CANCELADO: [],
     };
+
     const estadosPermitidos = transicionesPermitidas[pedido.estado];
 
     if (!estadosPermitidos.includes(estado)) {
@@ -171,13 +178,31 @@ export class PedidosService {
         `No se puede cambiar el pedido de ${pedido.estado} a ${estado}`,
       );
     }
-    return this.prisma.pedido.update({
-      where: {
-        id,
-      },
-      data: {
-        estado,
-      },
+
+    return this.prisma.$transaction(async (tx) => {
+      if (estado === 'CANCELADO') {
+        for (const detalle of pedido.detalles) {
+          await tx.inventario.update({
+            where: {
+              productoId: detalle.productoId,
+            },
+            data: {
+              stock: {
+                increment: detalle.cantidad,
+              },
+            },
+          });
+        }
+      }
+
+      return tx.pedido.update({
+        where: {
+          id,
+        },
+        data: {
+          estado,
+        },
+      });
     });
   }
   findLogistica() {
