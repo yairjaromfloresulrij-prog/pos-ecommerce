@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { CreateCarritoDto } from './dto/create-carrito.dto.js';
 import { PrismaService } from '../prisma/prisma.service.js';
-import { ProductoScalarFieldEnum } from '../generated/prisma/internal/prismaNamespace.js';
 
 @Injectable()
 export class CarritosService {

@@ -8,13 +8,22 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+
 import type { Request as ExpressRequest } from 'express';
+
 import { PedidosService } from './pedidos.service.js';
 import { CreatePedidoDto } from './dto/create-pedido.dto.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../auth/guards/roles.guard.js';
 import { Roles } from '../auth/decorators/roles.decorator.js';
-import { ApiBearerAuth, ApiTags, ApiOperation } from '@nestjs/swagger';
+
+import {
+  ApiBearerAuth,
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+} from '@nestjs/swagger';
+
 import { UpdateEstadoPedidoDto } from './dto/update-pedido.dto.js';
 
 @ApiTags('Pedidos')
@@ -33,17 +42,34 @@ export class PedidosController {
   ) {
     return this.pedidosService.create(createPedidoDto, req.user);
   }
+
+  @ApiBearerAuth()
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Consultar todos los pedidos' })
   @Get()
   findAll() {
     return this.pedidosService.findAll();
   }
+
+  @ApiBearerAuth()
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Consultar la cola de pedidos de logística' })
   @Get('logistica')
   findLogistica() {
     return this.pedidosService.findLogistica();
   }
+
+  @ApiBearerAuth()
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Actualizar el estado de un pedido' })
+  @ApiParam({
+    name: 'id',
+    example: 1,
+    description: 'ID del pedido cuyo estado se desea actualizar',
+  })
   @Patch(':id/estado')
   updateEstado(
     @Param('id') id: string,
